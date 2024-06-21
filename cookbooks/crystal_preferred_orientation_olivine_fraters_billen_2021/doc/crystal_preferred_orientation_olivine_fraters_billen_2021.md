@@ -7,13 +7,16 @@ by Menno Fraters and Magali Billen published in 2021.*
 This cookbook explains how to set up a numerical experiment for fabric
 developments of a single olivine particle under simple shear macroscopic strain. 
 It uses ASPECT's
-crystal preferred orientation implementation, which is described in detail in 
+crystal preferred orientation (CPO) implementation, which is described in detail in 
 {cite:t}`fraters_billen_2021_cpo` and the paper is open accessed at 
 [here](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2021GC009846).
 The fabric calculation is based on DRex (Kaminski et al., 2004) at 
 [here](https://academic.oup.com/gji/article/158/2/744/2013756).
+This notebook describe how to use ASPECT CPO implementation to calculate the major 
+olivine fabrics observed in the lab experiments. It focuses on reproducing Fig. 3
+of {cite}`fraters_billen_2021_cpo`.
 
-## Motivation
+### Motivation
 The Earth's plates can move relative to each other because the underlying mantle
 can flow/(be deformed) to accommodate such motions.
 This flowing motion reflects dynamics inside the planet but cannot be observed directly
@@ -23,7 +26,8 @@ waves that propagate inside the Earth. If such directionality is controlled by
 the mantle's motion/deformation, we can then use seismic anisotropy observations
 to infer mantle's deformation.
 
-People care about rock fabric developments under simple shear because it may
+Olivine is a major mineral of the Earth's upper mantle where continuous deformation
+takes place. People care about olivine fabric developments under simple shear as it may
 provide a bridge that links seismic anisotropy observations to the
 flows in the upper mantle that accommodate plate motions. Indeed, high temperature and 
 pressure lab experiments using Griggs apparatus to investigate olivine fabrics developments
@@ -32,9 +36,6 @@ under simple shear do find systematic types of fabrics based on the stress and w
 [link](https://doi.org/10.1146/annurev.earth.36.031207.124120) to the paper.
 
 ## Model setup
-
-Olivine is the major mineral of the Earth's upper mantle where continuous deformation
-takes place and we here focus on how olivine fabric develops under simple shear.
 
 Following {cite:t}`fraters_billen_2021_cpo`, we prescribe simple shear in a 3d Cartesian box/cube
 with dimensions of $1 \times 1 \times 1 $ $[m^3]$. The shear strain rate 
@@ -57,6 +58,20 @@ Update the input file with update_prm_files.sh inside
 See Pull Request #5873 
 [conversations](https://github.com/geodynamics/aspect/pull/5873#issuecomment-2167145176) for detail.
 :::
+
+Instead of solving Stokes equation with initial and boundary conditions, we instead prescribe 
+a constant simple shear strain rate field by setting Nonlinear solver scheme to 
+"single Advecgion, no Stokes" and
+prescribing the Stokes solution with a function. In this case, what we only care is the 
+prescribed strain rate that is exerted onto the olivine particle. Parameters useful for the Stokes
+equation is not important in this case:
+
+```{literalinclude} prescribe_stokes.part.prm
+```
+
+overview of your model setup, including the initial conditions, boundary conditions, geometry, etc.,
+ and anything that is special about the setup. 
+
 
 One important problem in models with melting and freezing (and other
 reactions) is that these reactions can be much faster than the time step of
