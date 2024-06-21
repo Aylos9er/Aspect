@@ -64,82 +64,19 @@ a constant simple shear strain rate field by setting Nonlinear solver scheme to
 "single Advecgion, no Stokes" and
 prescribing the Stokes solution with a function. In this case, what we only care is the 
 prescribed strain rate that is exerted onto the olivine particle. Parameters useful for the Stokes
-equation is not important in this case:
+equation is not important in this case. 
 
 ```{literalinclude} prescribe_stokes.part.prm
 ```
 
-overview of your model setup, including the initial conditions, boundary conditions, geometry, etc.,
- and anything that is special about the setup. 
+The second part of the input file specify what to output and what minerals to keep track of 
+CPO development. It also specifies the parameters for the DRex algorithm. 
 
-
-One important problem in models with melting and freezing (and other
-reactions) is that these reactions can be much faster than the time step of
-the model. For mid-ocean ridges, melt is generally assumed to be in
-equilibrium with the solid, which means that the reaction is basically
-instantaneous. To model these type of processes, ASPECT uses operator splitting (see
-also {ref}`sec:benchmark:operator-splitting`): Reactions are solved
-on a different time scale than advection. For this model, this means that at
-the beginning of each time step, all melting reactions, including their latent
-heat effects, are solved using several shorter sub-time steps. In the input
-file, we have to choose both the size of these sub-time steps and the rate (or
-characteristic time scale) of melting, and they have to be consistent in the
-sense that the operator splitting time step can not be larger than the
-reaction time scale. The melting model we use here is the anhydrous mantle
-melting model of {cite:t}`katz:etal:2003` for a peridotitic rock
-composition, as implemented in the "melt simple" material model.
-
-```{literalinclude} melting_and_freezing.part.prm
+```{literalinclude} cpo.part.prm
 ```
-
-To make sure we reproduce the characteristic triangular melting region of a
-mid-ocean ridge, we have to set up the boundary conditions in a way so that
-they will lead to corner flow. At the top boundary, we can simply prescribe
-the half-spreading rate, and at the left boundary we can use a free-slip
-boundary, as material should not cross this centerline. However, we do not
-know the inflow and outflow velocities at the bottom and right side of the
-model. Instead, what we can do here is prescribing the lithostatic pressure as
-a boundary condition for the stress. We accomplish this by using the
-"initial lithostatic pressure" model. This plugin will
-automatically compute a 1d lithostatic pressure profile at a given point at
-the time of the model start and apply it as a boundary traction.
-
-```{literalinclude} boundary_conditions.part.prm
-```
-
-Finally, we have to make sure that the resolution is high enough to model melt
-migration. This is particularly important in regions where the porosity is
-low, but still high enough that the two-phase flow equations are solved
-(instead of the Stokes system, which is solved if there is no melt present in
-a cell). At the boundary between these regions, material properties like the
-compaction viscosity may jump, and there may be strong gradients or jumps in
-some solution variables such as the melt velocity and the compaction pressure.
-In addition, the characteristic length scale for melt transport, the
-compaction length $\delta$, depends on the porosity:
-```{math}
-\delta = \sqrt{\frac{(\xi+4\eta/3)k}{\eta_f}}.
-```
-
-While the melt viscosity
-$\eta_f$ is usually assumed to be constant, and the shear and compaction
-viscosities $\eta$ and $\xi$ increase with decreasing porosity $\phi$, the
-permeability $k \propto \phi^2$ or $k \propto \phi^3$ dominates this relation,
-so that the compaction length becomes smaller for lower porosities. As the
-length scale of melt migration is usually smaller than for mantle convection,
-we want to make sure that regions where melt is present have a high
-resolution, and that this high resolution extends to all cells where the
-two-phase flow equations are solved.
-
-```{literalinclude} mesh_refinement.part.prm
-```
-
-ASPECT also supports an alternative method to make sure that regions with melt are
-sufficiently well resolved, relying directly on the compaction length, and we
-will discuss this method as a possible modification to this cookbook at the
-end of this section.
 
 The complete input file is located at
-[cookbooks/mid_ocean_ridge/mid_ocean_ridge.prm](https://www.github.com/geodynamics/aspect/blob/main/cookbooks/mid_ocean_ridge/mid_ocean_ridge.prm).
+[/cookbooks/crystal_preferred_orientation_olivine_fraters_billen_2021/olivineA.prm](https://www.github.com/geodynamics/aspect/blob/main/cookbooks/crystal_preferred_orientation_olivine_fraters_billen_2021/olivineA.prm).
 
 ## Plotting pole figure
 
