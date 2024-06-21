@@ -7,7 +7,7 @@ set Nonlinear solver scheme  = single Advection, no Stokes
 set End time                 = 3e5
 set Use years in output instead of seconds = false
 
-# Set zero gravity 
+# Set zero gravity
 subsection Gravity model
   set Model name = vertical
 
@@ -51,4 +51,3 @@ subsection Mesh refinement
   set Initial adaptive refinement              = 0
   set Time steps between mesh refinement       = 10000
 end
-

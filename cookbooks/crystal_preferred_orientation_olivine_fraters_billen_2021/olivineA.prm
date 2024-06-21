@@ -159,7 +159,7 @@ subsection Particles
       set Mobility = 125 ## 125+-75 Annotation LPO Mobility
       set Stress exponents = 3.5
       set Exponents p = 1.5
-      set Nucleation efficiency = 5 ## Annotation Nucleation efficientcy
+      set Nucleation efficiency = 5 ## Annotation Nucleation efficiency
       set Threshold GBS = 0.3 ## Annotation TGBS
     end
   end
