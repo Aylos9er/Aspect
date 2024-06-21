@@ -80,61 +80,25 @@ The complete input file is located at
 
 ## Plotting pole figure
 
-## Model evolution
+## Model results
+```{figure-md} fig:initCPO
+<img src="initial_random_cpo.png" style="width:80.0%" />
 
-```{figure-md} fig:mid-ocean-ridge
-<img src="Olivine_A_type.png" style="width:80.0%" />
+Initial randomized CPO at time zero.
+```
 
-Mid-ocean ridge model after 8 million years. The top panel shows the depletion and porosity fields (with the characteristic triangular melting region), the bottom panel shows the temperature distribution and the melt velocity, indicated by the arrows.
+```{figure-md} fig:olivine_fabrics
+<img src="Olivine_fabrics.svg" style="width:80.0%" />
+
+Olivine A-E type fabrics under simple shear with a shear strain of 1.5
+at 3e5 seconds of model time under constant shear strain rate:
+ $\dot{\epsilon}_{xz} = -5\times 10^{-6} [s^{-1}]$
 ```
 
 When we look at the visualization output of this model (see also
-{numref}`fig:mid-ocean-ridge`), we can see how the hot material flowing in from the bottom
-starts to melt as it reaches lower and lower pressures and crosses the
-solidus. Simultaneously, melting makes the residual solid rock more depleted
-(as indicated by the positive values of the compositional field called
-'peridotite'). Once material approaches the surface, it is cooled
-from the cold boundary layer above, and melt starts to crystallize again,
-generating 'enriched' basaltic crust where is freezes (as
-indicated by the negative values of the compositional field called
-'peridotite'). As the temperature gradients are much sharper close
-to the surface, this transition from melt to solid rock is much sharper than
-in the melting region. Once material crystallizes, it is transported away from
-the ridge axis due to the flow field induced by the prescribed plate velocity
-at the top boundary. This way, over time, the classical triangular melting
-region develops at the ridge axis, and the material transported away from the
-ridge shows two distinct layers: The top $\approx 7$ km are enriched material,
-and form the basaltic crust (negative peridotite field), and the $\approx 50$
-km below are depleted material, and form the lithosphere (positive peridotite
-field). A vertical profile at a distance of 80 km from the ridge axis showing
-this composition can be found in {numref}`fig:mid-ocean-ridge-profile`.
+{numref}`fig:olivine_fabrics`), we can see 
 
-```{figure-md} fig:mid-ocean-ridge-profile
-<img src="depletion_profile.svg" style="width:35.0%" />
 
-Vertical profile through the model domain at a distance of 80 km from the ridge axis at the end of the model run, showing the distribution of depletion and enrichment as indicated by the peridotite field.
-```
-
-## Mesh refinement
-
-Another option for making sure that melt migration is resolved properly in the
-model is using a refinement criterion that directly relates to the compaction
-length. This can be done in the mesh refinement section of the input file:
-
-```{literalinclude} compaction_length.part.prm
-```
-
-This will lead to a higher resolution particularly in regions with low (but
-not zero) porosity, and can be useful to resolve the strong gradients in the
-melt velocity and compaction pressure that are to be expected in these places
-(see {numref}`fig:mid-ocean-ridge-mesh`). Of course it is also possible to combine both methods
-for refining the mesh.
-
-```{figure-md} fig:mid-ocean-ridge-mesh
-<img src="refinement.svg" style="width:60.0%" />
-
-Mesh after a time of 3.6 million years for a model using the composition threshold refinement strategy (left) and the compaction length refinement strategy (right) Background colors indicate the melt velocity. Its sharp gradients at the interface between regions with and without melt can only be resolved using the compaction length refinement strategy.
-```
 
 ## Extending the model
 
