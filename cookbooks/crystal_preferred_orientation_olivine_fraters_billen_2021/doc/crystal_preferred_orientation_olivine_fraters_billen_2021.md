@@ -4,7 +4,7 @@
 based on a section in {cite:t}`fraters_billen_2021_cpo` 
 by Menno Fraters and Magali Billen published in 2021.*
 
-This cookbook explains how to set up a numerical experiment for rock fabric
+This cookbook explains how to set up a numerical experiment for fabric
 developments of a single olivine particle under simple shear macroscopic strain. 
 It uses ASPECT's
 crystal preferred orientation implementation, which is described in detail in 
@@ -25,27 +25,38 @@ to infer mantle's deformation.
 
 People care about rock fabric developments under simple shear because it may
 provide a bridge that links seismic anisotropy observations to the
-flows in the upper mantle that accommodate plate motions.
+flows in the upper mantle that accommodate plate motions. Indeed, high temperature and 
+pressure lab experiments using Griggs apparatus to investigate olivine fabrics developments
+under simple shear do find systematic types of fabrics based on the stress and water content conditions
+(see Karato et al., 2008 for details). Here is a 
+[link](https://doi.org/10.1146/annurev.earth.36.031207.124120) to the paper.
 
 ## Model setup
 
 Olivine is the major mineral of the Earth's upper mantle where continuous deformation
 takes place and we here focus on how olivine fabric develops under simple shear.
 
-We prescribe simple shear in a 3d Cartesian box/cube
+Following {cite:t}`fraters_billen_2021_cpo`, we prescribe simple shear in a 3d Cartesian box/cube
 with dimensions of $1 \times 1 \times 1 $ $[m^3]$. The shear strain rate 
-$\dot{\epsilon}_{xz} = 5\times 10^{-6} [s^{-1}]$. The olivine particle is placed
+$\dot{\epsilon}_{xz} = -5\times 10^{-6} [s^{-1}]$. The olivine particle is placed
 right at the center of the cubic box so it stays stationary. The DRex implementation
 keep tracks of rotations of crystal grains within the particle under macroscopic deformation.
 
 ```{figure-md} fig:model_setup_3D_box
-<img src="model_setup_3D_box.png" style="width:50.0%" />
+<img src="model_setup_3D_box.png" style="width:80.0%" />
 3D shear box with velocity vectors. The grey ball is the central olivine particle.
 ```
 
-The model shows how crystal grains rotate and align under simple shear.
+The model shows how crystal grains rotate and align under simple shear with pole figures.
 
 ## The input file
+
+:::{tip}
+Update the input file with update_prm_files.sh inside 
+/aspect/contrib/utilities if the model doesn't run. 
+See Pull Request #5873 
+[conversations](https://github.com/geodynamics/aspect/pull/5873#issuecomment-2167145176) for detail.
+:::
 
 One important problem in models with melting and freezing (and other
 reactions) is that these reactions can be much faster than the time step of
@@ -115,10 +126,12 @@ end of this section.
 The complete input file is located at
 [cookbooks/mid_ocean_ridge/mid_ocean_ridge.prm](https://www.github.com/geodynamics/aspect/blob/main/cookbooks/mid_ocean_ridge/mid_ocean_ridge.prm).
 
+## Plotting pole figure
+
 ## Model evolution
 
 ```{figure-md} fig:mid-ocean-ridge
-<img src="Olivine_A_type.png" style="width:50.0%" />
+<img src="Olivine_A_type.png" style="width:80.0%" />
 
 Mid-ocean ridge model after 8 million years. The top panel shows the depletion and porosity fields (with the characteristic triangular melting region), the bottom panel shows the temperature distribution and the melt velocity, indicated by the arrows.
 ```
@@ -209,3 +222,6 @@ On the implementation and usability of crystal preferred orientation evolution i
 
 - Kaminski, E., Ribe, N. M., & Browaeys, J. T. (2004). 
 D-Rex, a program for calculation of seismic anisotropy due to crystal lattice preferred orientation in the convective upper mantle. Geophysical Journal International, 158(2), 744–752.
+
+- Karato, S., Jung, H., Katayama, I., & Skemer, P. (2008). 
+Geodynamic significance of seismic anisotropy of the upper mantle: New insights from laboratory studies. Annu. Rev. Earth Planet. Sci., 36, 59–95.
