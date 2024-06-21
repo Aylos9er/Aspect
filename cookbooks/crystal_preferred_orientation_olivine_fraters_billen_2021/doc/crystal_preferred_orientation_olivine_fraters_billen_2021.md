@@ -82,13 +82,13 @@ The complete input file is located at
 
 ## Model results
 ```{figure-md} fig:initCPO
-<img src="initial_random_cpo.png" style="width:80.0%" />
+<img src="initial_random_cpo.png" style="width:50.0%" />
 
 Initial randomized CPO at time zero.
 ```
 
 ```{figure-md} fig:olivine_fabrics
-<img src="Olivine_fabrics.svg" style="width:80.0%" />
+<img src="Olivine_fabrics.svg" style="width:60.0%" />
 
 Olivine A-E type fabrics under simple shear with a shear strain of 1.5
 at 3e5 seconds of model time under constant shear strain rate:
@@ -102,35 +102,18 @@ When we look at the visualization output of this model (see also
 
 ## Extending the model
 
-There are a number of parameters that influence the amount of melting, how
-fast the melt moves, and ultimately the distribution of crustal and
-lithospheric material. Some ideas for adapting the model setup:
+This simple 1 $m^{3}$ cube simple shear model for tracking olivine fabric development using
+the crystal preferred orientation implementation can be extended for various settings. 
+Some ideas for adapting the model setup:
 
--   Changing the spreading rate: This can be done by choosing a different
-    magnitude of the prescribed velocity at the top boundary, and influences
-    the size and shape of the triangular melting region. Faster spreading
-    allows hot material to move further away from the ridge axis, and hence
-    facilitates a melting region that extends further in horizontal direction.
+-   Setup high pressure and temperature lab experiments for olivine CPO. 
+    After benchmarking against the lab experiment results, it could then be 
+    extended beyond parameter space limited by lab experiment. 
 
--   Changing the temperature profile: This can be done by choosing a different
-    bottom boundary temperature and influences the amount of melting, and
-    hence the thickness of the crust. Higher temperatures lead to more melt
-    being generated.
+-   Add CPO calculations in large scale geodynamic models like mantle plume,
+    lower crust delamination and mid-ocean ridges.
 
--   Changing the speed of melt migration: The velocity of the melt with
-    respect to the solid velocity is determined by the permeability and the
-    melt viscosity (and the pressure gradients in the melt). Increasing the
-    permeability (by setting a different "Reference permeability"
-    in the melt simple model) can lead to higher melt velocities, melt
-    reaching the depth of freezing faster, and hence lower overall porosity
-    values at steady state.
-
--   Making the viscosity law more realistic: In this simple model, the
-    viscosity only depends on the amount of melt that is present and is
-    otherwise constant. This could be the reason why melt can not flow up all
-    the way up at the ridge axis, but freezes before it reaches the surface.
-    Introducing a temperature-dependent rheology could improve this behavior
-    (and in reality, plastic effects might also play a role).
+-   Include anisotropic viscosity to feed this CPO back to influence the stokes solution.
 
 ## References:
 - Fraters, M. R. T., & Billen, M. I. (2021). 
