@@ -24,26 +24,26 @@ the mantle's motion/deformation, we can then use seismic anisotropy observations
 to infer mantle's deformation.
 
 People care about rock fabric developments under simple shear because it may
-provide a bridge that links seismic anisotropy observations to the 
+provide a bridge that links seismic anisotropy observations to the
 flows in the upper mantle that accommodate plate motions.
 
-Olivine is the major mineral of the Earth's upper mantle where most deformation
+## Model setup
+
+Olivine is the major mineral of the Earth's upper mantle where continuous deformation
 takes place and we here focus on how olivine fabric develops under simple shear.
 
-We prescribe simple shear in a 3d Cartesian box/cube 
+We prescribe simple shear in a 3d Cartesian box/cube
 with dimensions of $1 \times 1 \times 1 $ $[m^3]$. The shear strain rate 
 $\dot{\epsilon}_{xz} = 5\times 10^{-6} [s^{-1}]$. The olivine particle is placed
-right at the center of the cubic box so it can stay stationary.
-Solid
-material is flowing in from the bottom with a prescribed temperature and
-melting due to decompression as is rises. The model is cooled from the top so
-that melt freezes again as it approaches this boundary. In addition, a fixed
-plate velocity away from the ridge axis is prescribed at the top boundary,
-inducing corner flow. Material can flow out freely at the right model
-boundary. The model shows both how melt is focused towards the ridge axis, and
-how melting and freezing induces chemical heterogeneity in the mantle,
-generating the crust and lithosphere. A movie of the full model evolution can
-be found [online](https://www.youtube.com/watch?v=f4Bc4lzdNP0).
+right at the center of the cubic box so it stays stationary. The DRex implementation
+keep tracks of rotations of crystal grains within the particle under macroscopic deformation.
+
+```{figure-md} fig:model_setup_3D_box
+<img src="model_setup_3D_box.png" style="width:50.0%" />
+3D shear box with velocity vectors. The grey ball is the central olivine particle.
+```
+
+The model shows how crystal grains rotate and align under simple shear.
 
 ## The input file
 
