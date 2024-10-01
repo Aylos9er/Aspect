@@ -330,53 +330,54 @@ namespace aspect
       for (unsigned int particle_world = 0; particle_world < this->n_particle_worlds(); ++particle_world)
         {
           const Particle::World<dim> &world = this->get_particle_world(particle_world);
-          statistics.add_value("Number of advected particles",world.n_global_particles());
 
-          // If it's not time to generate an output file
-          // return early with the number of particles that were advected
-          if (this->get_time() < last_output_time + output_interval)
+          const std::string statistics_column_name = (particle_world == 0 ?
+                                                      "Number of advected particles" :
+                                                      "Number of advected particles (" + Utilities::int_to_string(particle_world+1) + ")");
+
+          statistics.add_value(statistics_column_name,world.n_global_particles());
+
+          if (particle_world > 0)
             {
-              write_output = false;
-              if (particle_world > 0)
-                {
-                  number_of_advected_particles += ", ";
-                }
-              number_of_advected_particles += Utilities::int_to_string(world.n_global_particles());
-
-              continue;
+              number_of_advected_particles += ", ";
             }
+          number_of_advected_particles += Utilities::int_to_string(world.n_global_particles());
+        }
 
-          // If we do not write output
-          // return early with the number of particles that were advected
-          if (output_formats.size() == 0 || output_formats[0] == "none")
-            {
-              // Up the next time we need output. This is relevant to correctly
-              // write output after a restart if the format is changed.
-              set_last_output_time (this->get_time());
+      // If it's not time to generate an output file
+      // return early with the number of particles that were advected
+      if (this->get_time() < last_output_time + output_interval)
+        {
+          write_output = false;
+        }
 
-              write_output = false;
-              if (particle_world > 0)
-                {
-                  number_of_advected_particles += ", ";
-                }
-              number_of_advected_particles += Utilities::int_to_string(world.n_global_particles());
+      // If we do not write output
+      // return early with the number of particles that were advected
+      if (output_formats.size() == 0 || output_formats[0] == "none")
+        {
+          // Up the next time we need output. This is relevant to correctly
+          // write output after a restart if the format is changed.
+          set_last_output_time (this->get_time());
 
-              continue;
-            }
+          write_output = false;
+        }
 
-          Assert(write_output, ExcMessage("Trying to write output while it was set to not do so."));
+      if (write_output == false)
+        return std::make_pair("Number of advected particles", number_of_advected_particles);
 
-          if (output_file_number == numbers::invalid_unsigned_int)
-            output_file_number = 0;
-          else
-            ++output_file_number;
+      if (output_file_number == numbers::invalid_unsigned_int)
+        output_file_number = 0;
+      else
+        ++output_file_number;
 
+      for (unsigned int particle_world = 0; particle_world < this->n_particle_worlds(); ++particle_world)
+        {
+          const Particle::World<dim> &world = this->get_particle_world(particle_world);
           std::string particles_output_base_name = "particles";
           if (particle_world > 0)
             {
               particles_output_base_name += "-" + Utilities::int_to_string(particle_world+1);
             }
-
 
           // Create the particle output
           const bool output_hdf5 = std::find(output_formats.begin(), output_formats.end(),"hdf5") != output_formats.end();
@@ -548,14 +549,14 @@ namespace aspect
             screen_output = particle_output;
 
           // record the file base file name in the output file
-          statistics.add_value ("Particle file name",
+          const std::string statistics_column_name = (particle_world == 0 ?
+                                                      "Particle file name" :
+                                                      "Particle file name (" + Utilities::int_to_string(particle_world+1) + ")");
+          statistics.add_value (statistics_column_name,
                                 particle_output);
         }
 
-      if (write_output)
-        return std::make_pair("Writing particle output:", screen_output);
-      else
-        return std::make_pair("Number of advected particles:", number_of_advected_particles);
+      return std::make_pair("Writing particle output:", screen_output);
     }
 
 
