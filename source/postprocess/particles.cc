@@ -259,6 +259,8 @@ namespace aspect
     template <int dim>
     void
     Particles<dim>::write_description_files (const internal::ParticleOutput<dim> &data_out,
+                                             const std::string &description_file_prefix,
+                                             const std::string &solution_file_directory,
                                              const std::string &solution_file_prefix,
                                              const std::vector<std::string> &filenames)
     {
@@ -267,23 +269,23 @@ namespace aspect
                                                this->get_time());
       const std::string pvtu_filename = (solution_file_prefix +
                                          ".pvtu");
-      std::ofstream pvtu_file (this->get_output_directory() + "particles/" +
+      std::ofstream pvtu_file (this->get_output_directory() + solution_file_directory +
                                pvtu_filename);
       data_out.write_pvtu_record (pvtu_file, filenames);
 
       // now also generate a .pvd file that matches simulation
       // time and corresponding .pvtu record
-      times_and_pvtu_file_names.emplace_back(time_in_years_or_seconds, "particles/"+pvtu_filename);
+      times_and_pvtu_file_names[description_file_prefix].emplace_back(time_in_years_or_seconds, solution_file_directory + pvtu_filename);
 
-      const std::string pvd_filename = (this->get_output_directory() + "particles.pvd");
+      const std::string pvd_filename = (this->get_output_directory() + description_file_prefix + ".pvd");
       std::ofstream pvd_file (pvd_filename);
 
-      DataOutBase::write_pvd_record (pvd_file, times_and_pvtu_file_names);
+      DataOutBase::write_pvd_record (pvd_file, times_and_pvtu_file_names[description_file_prefix]);
 
       // finally, do the same for VisIt via the .visit file for this
       // time step, as well as for all time steps together
       const std::string visit_filename = (this->get_output_directory()
-                                          + "particles/"
+                                          + solution_file_directory
                                           + solution_file_prefix
                                           + ".visit");
       std::ofstream visit_file (visit_filename);
@@ -297,19 +299,19 @@ namespace aspect
         filenames_with_path.reserve(filenames.size());
         for (const auto &filename : filenames)
           {
-            filenames_with_path.push_back("particles/" + filename);
+            filenames_with_path.push_back(solution_file_directory + filename);
           }
 
-        output_file_names_by_timestep.push_back (filenames_with_path);
+        output_file_names_by_timestep[description_file_prefix].push_back (filenames_with_path);
       }
 
       std::ofstream global_visit_file (this->get_output_directory() +
-                                       "particles.visit");
+                                       description_file_prefix + ".visit");
 
       std::vector<std::pair<double, std::vector<std::string>>> times_and_output_file_names;
-      for (unsigned int timestep=0; timestep<times_and_pvtu_file_names.size(); ++timestep)
-        times_and_output_file_names.emplace_back(times_and_pvtu_file_names[timestep].first,
-                                                 output_file_names_by_timestep[timestep]);
+      for (unsigned int timestep=0; timestep<times_and_pvtu_file_names[description_file_prefix].size(); ++timestep)
+        times_and_output_file_names.emplace_back(times_and_pvtu_file_names[description_file_prefix][timestep].first,
+                                                 output_file_names_by_timestep[description_file_prefix][timestep]);
       DataOutBase::write_visit_record (global_visit_file, times_and_output_file_names);
     }
 
@@ -434,7 +436,11 @@ namespace aspect
                         filenames.push_back (particle_file_prefix
                                              + "." + Utilities::int_to_string(i, 4)
                                              + ".vtu");
-                      write_description_files (data_out, particle_file_prefix, filenames);
+                      write_description_files (data_out,
+                                               particles_output_base_name,
+                                               particles_output_base_name + "/",
+                                               particle_file_prefix,
+                                               filenames);
                     }
 
                   const unsigned int n_processes = Utilities::MPI::n_mpi_processes(this->get_mpi_communicator());
