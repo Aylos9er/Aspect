@@ -418,8 +418,8 @@ namespace aspect
                                                                               particle_file_name,
                                                                               time_in_years_or_seconds,
                                                                               this->get_mpi_communicator());
-                  xdmf_entries.push_back(new_xdmf_entry);
-                  data_out.write_xdmf_file(xdmf_entries, this->get_output_directory() + xdmf_filename,
+                  xdmf_entries[particles_output_base_name].push_back(new_xdmf_entry);
+                  data_out.write_xdmf_file(xdmf_entries[particles_output_base_name], this->get_output_directory() + xdmf_filename,
                                            this->get_mpi_communicator());
                 }
               else if (output_format == "vtu")

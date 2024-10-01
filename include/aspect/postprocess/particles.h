@@ -235,7 +235,7 @@ namespace aspect
          * dimensions and names of data written at all steps during the
          * simulation.
          */
-        std::vector<XDMFEntry>  xdmf_entries;
+        std::map<std::string,std::vector<XDMFEntry>>  xdmf_entries;
 
         /**
          * VTU file output supports grouping files from several CPUs into one
